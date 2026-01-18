@@ -1,13 +1,10 @@
 'use client';
 
 import React, { createContext, useContext, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ContactSchema } from '@/lib/schema';
 import type { AppState, AppContextType, Building } from '@/lib/types';
 
 const defaultBuilding: Building = {
-  id: `building-${Date.now()}`,
+  id: 'building-0',
   objectType: 'Dzīvoklis',
   ownerName: '',
   propertyArea: undefined,
