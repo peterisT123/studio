@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useRef } from 'react';
 import type { AppState, AppContextType, Building } from '@/lib/types';
 
 const defaultBuilding: Building = {
@@ -8,7 +8,7 @@ const defaultBuilding: Building = {
   objectType: 'Dzīvoklis',
   ownerName: '',
   propertyArea: undefined,
-  buildYear: '',
+  buildYear: 'Pēc 2000',
   isConstantlyInhabited: true,
   lossesInLast3Years: false,
   movablePropertyIncluded: false,
@@ -33,6 +33,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>(initialState);
+  const nextBuildingId = useRef(1);
 
   const setStep = (step: number) => {
     setState((prev) => ({ ...prev, step }));
@@ -55,7 +56,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ...prev,
       buildings: [
         ...prev.buildings,
-        { ...defaultBuilding, id: `building-${Date.now()}` },
+        { ...defaultBuilding, id: `building-${nextBuildingId.current++}` },
       ],
     }));
   };
