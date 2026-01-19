@@ -22,8 +22,8 @@ export function IntroStep() {
       <Card className="rounded-3xl shadow-lg overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
             <div className='p-8 sm:p-12 flex flex-col justify-center'>
-                 <h3 className="text-3xl lg:text-4xl font-bold font-headline text-foreground leading-tight">
-                    Jūsu īpašuma drošības ceļa karte
+                 <h3 className="text-3xl lg:text-4xl font-bold font-headline text-primary leading-tight">
+                    Aptauja pirms izteikt piedāvājumu
                 </h3>
                 <p className="mt-4 text-lg font-bold text-foreground">
                     Sāciet savu ceļu uz pilnīgu sirdsmieru. Pielāgojiet savu apdrošināšanas plānu, kas atbilst tieši Jūsu vajadzībām.
