@@ -16,7 +16,7 @@ This project is configured to automatically deploy to GitHub Pages when changes 
    - Source: **GitHub Actions**
 4. Push changes to the `main` branch to trigger the deployment
 
-The site will be available at: `https://peterisT123.github.io/studio/`
+The site will be available at: `https://<username>.github.io/studio/`
 
 ### How it Works
 
