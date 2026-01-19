@@ -37,7 +37,7 @@ function formatDataForEmail(data: AppState): string {
     if (building.objectType === 'Dzīvoklis') {
       emailBody += `Stāvs: ${building.currentFloor} no ${building.totalFloors}\n`;
     }
-    if (building.objectType === 'Dzīvojamā ēka') {
+    if (building.objectType === 'Māja') {
         emailBody += `Stāvu skaits: ${building.totalFloors}\n`;
     }
 

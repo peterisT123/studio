@@ -80,7 +80,7 @@ export function SummaryStep() {
                       <SummaryItem label="Kopējais stāvu skaits" value={building.totalFloors} />
                     </>
                   )}
-                   {building.objectType === 'Dzīvojamā ēka' && (
+                   {building.objectType === 'Māja' && (
                     <SummaryItem label="Stāvu skaits" value={building.totalFloors} />
                   )}
                   <BooleanSummaryItem label="Pastāvīgi apdzīvots" value={building.isConstantlyInhabited} />

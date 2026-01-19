@@ -83,8 +83,8 @@ export function PropertyCard({ building, index }: PropertyCardProps) {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="Dzīvoklis">Dzīvoklis</SelectItem>
-                          <SelectItem value="Dzīvojamā ēka">Dzīvojamā ēka</SelectItem>
-                          <SelectItem value="Palīgēka">Palīgēka</SelectItem>
+                          <SelectItem value="Māja">Māja</SelectItem>
+                          <SelectItem value="Ēka">Ēka</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -130,7 +130,7 @@ export function PropertyCard({ building, index }: PropertyCardProps) {
                   </>
                 )}
 
-                {objectType === 'Dzīvojamā ēka' && (
+                {objectType === 'Māja' && (
                     <FormField
                       control={form.control}
                       name="totalFloors"

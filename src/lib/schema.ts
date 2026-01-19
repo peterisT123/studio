@@ -5,7 +5,7 @@ const invalidTypeError = { invalid_type_error: 'Ievadīta nekorekta vērtība.' 
 
 export const BuildingSchema = z.object({
     id: z.string(),
-    objectType: z.enum(['Dzīvoklis', 'Dzīvojamā ēka', 'Palīgēka'], requiredError),
+    objectType: z.enum(['Dzīvoklis', 'Māja', 'Ēka'], requiredError),
     ownerName: z.string(requiredError).min(2, 'Vārdam jābūt vismaz 2 burtus garam.').max(120, 'Vārds nevar būt garāks par 120 burtiem.'),
     propertyArea: z.number({ ...requiredError, ...invalidTypeError }).positive('Platībai jābūt lielākai par 0.'),
     buildYear: z.enum(['Pirms 1971', 'No 1972 - 1999', 'Pēc 2000'], requiredError),
@@ -39,7 +39,7 @@ export const BuildingSchema = z.object({
             });
         }
     }
-    if (data.objectType === 'Dzīvojamā ēka') {
+    if (data.objectType === 'Māja') {
         if (!data.totalFloors) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,

@@ -23,7 +23,7 @@ export function IntroStep() {
         <div className="grid grid-cols-1 md:grid-cols-2">
             <div className='p-8 sm:p-12 flex flex-col justify-center'>
                  <h3 className="text-3xl lg:text-4xl font-bold font-headline text-primary leading-tight">
-                    Aptauja pirms izteikt piedāvājumu
+                    Aptauja
                 </h3>
                 <p className="mt-4 text-lg font-bold text-foreground">
                     Sāciet savu ceļu uz pilnīgu sirdsmieru. Pielāgojiet savu apdrošināšanas plānu, kas atbilst tieši Jūsu vajadzībām.
@@ -46,7 +46,7 @@ export function IntroStep() {
       
       <Card className="max-w-2xl mx-auto rounded-3xl shadow-lg">
         <CardContent className="p-8">
-          <h3 className="text-xl font-semibold mb-4 text-center font-headline">Izvēlieties juridisko statusu</h3>
+          <h3 className="text-xl font-semibold mb-4 text-center font-headline">Izvēlies statusu</h3>
           <RadioGroup
             defaultValue={state.legalStatus}
             onValueChange={handleLegalStatusChange}
