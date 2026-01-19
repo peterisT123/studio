@@ -54,7 +54,7 @@ export function SummaryStep() {
           <h3 className="text-lg font-semibold font-headline mb-2 text-primary">Klienta informācija</h3>
           <Card className='rounded-2xl'>
             <CardContent className='p-4 divide-y'>
-              <SummaryItem label="Juridiskais statuss" value={state.legalStatus} />
+              <SummaryItem label="Personas statuss" value={state.legalStatus} />
               <SummaryItem label="Vārds, uzvārds" value={state.contact.name} />
               <SummaryItem label="E-pasts" value={state.contact.email} />
               <SummaryItem label="Tālrunis" value={state.contact.phone} />
@@ -68,7 +68,7 @@ export function SummaryStep() {
             {state.buildings.map((building, index) => (
               <Card key={building.id} className="rounded-2xl overflow-hidden">
                 <CardHeader className='bg-muted/50 p-4'>
-                    <CardTitle className='text-xl font-headline'>Objekts #{index + 1}: {building.objectType}</CardTitle>
+                    <CardTitle className='text-xl font-headline'>Nr.{index + 1} - {building.objectType}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 divide-y">
                   <SummaryItem label="Īpašnieks" value={building.ownerName} />

@@ -20,7 +20,7 @@ function formatDataForEmail(data: AppState): string {
   
   emailBody += `KLIENTA INFORMĀCIJA\n`;
   emailBody += `-------------------\n`;
-  emailBody += `Juridiskais statuss: ${data.legalStatus}\n`;
+  emailBody += `Personas statuss: ${data.legalStatus}\n`;
   emailBody += `Vārds, uzvārds: ${data.contact.name}\n`;
   emailBody += `E-pasts: ${data.contact.email}\n`;
   emailBody += `Tālrunis: ${data.contact.phone}\n\n`;
@@ -29,8 +29,7 @@ function formatDataForEmail(data: AppState): string {
   emailBody += `---------------------\n`;
 
   data.buildings.forEach((building, index) => {
-    emailBody += `\nOBJEKTS #${index + 1}\n`;
-    emailBody += `Tips: ${building.objectType}\n`;
+    emailBody += `\nNr.${index + 1} - ${building.objectType}\n`;
     emailBody += `Īpašnieka vārds: ${building.ownerName}\n`;
     emailBody += `Platība: ${building.propertyArea} m²\n`;
     emailBody += `Būvniecības gads: ${building.buildYear}\n`;

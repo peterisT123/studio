@@ -53,7 +53,7 @@ export function PropertyCard({ building, index }: PropertyCardProps) {
         <CardHeader className="bg-muted/50 p-4 flex flex-row items-center justify-between">
           <CardTitle className="font-headline text-xl text-foreground flex items-center gap-2">
             <Building className="h-6 w-6 text-primary" />
-            Īpašums #{index + 1}
+            Nr.{index + 1} - {objectType}
           </CardTitle>
           {buildings.length > 1 && (
             <Button
