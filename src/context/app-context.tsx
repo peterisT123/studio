@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useRef } from 'react';
+import React, { createContext, useContext, useState, useRef, useCallback } from 'react';
 import type { AppState, AppContextType, Building } from '@/lib/types';
 
 const defaultBuilding: Building = {
@@ -35,23 +35,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>(initialState);
   const nextBuildingId = useRef(1);
 
-  const setStep = (step: number) => {
+  const setStep = useCallback((step: number) => {
     setState((prev) => ({ ...prev, step }));
-  };
+  }, []);
 
-  const handleNext = () => {
-    if (state.step < 4) {
-      setStep(state.step + 1);
-    }
-  };
+  const handleNext = useCallback(() => {
+    setState((prev) => (prev.step < 4 ? { ...prev, step: prev.step + 1 } : prev));
+  }, []);
 
-  const handleBack = () => {
-    if (state.step > 1) {
-      setStep(state.step - 1);
-    }
-  };
+  const handleBack = useCallback(() => {
+    setState((prev) => (prev.step > 1 ? { ...prev, step: prev.step - 1 } : prev));
+  }, []);
 
-  const addBuilding = () => {
+  const addBuilding = useCallback(() => {
     setState((prev) => ({
       ...prev,
       buildings: [
@@ -59,26 +55,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         { ...defaultBuilding, id: `building-${nextBuildingId.current++}` },
       ],
     }));
-  };
+  }, []);
 
-  const updateBuilding = (index: number, data: Partial<Building>) => {
+  const updateBuilding = useCallback((index: number, data: Partial<Building>) => {
     setState((prev) => {
       const newBuildings = [...prev.buildings];
       newBuildings[index] = { ...newBuildings[index], ...data };
       return { ...prev, buildings: newBuildings };
     });
-  };
+  }, []);
 
-  const removeBuilding = (index: number) => {
+  const removeBuilding = useCallback((index: number) => {
     setState((prev) => ({
       ...prev,
       buildings: prev.buildings.filter((_, i) => i !== index),
     }));
-  };
+  }, []);
   
-  const setSubmitted = (submitted: boolean) => {
+  const setSubmitted = useCallback((submitted: boolean) => {
     setState((prev) => ({ ...prev, submitted }));
-  };
+  }, []);
 
 
   const value = {
