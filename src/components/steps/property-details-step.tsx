@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PlusCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -17,16 +17,19 @@ import {
 export function PropertyDetailsStep() {
   const { state, addBuilding } = useAppContext();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const prevBuildingsLength = useRef(state.buildings.length);
 
   useEffect(() => {
-    // Handle switching to a newly added building
-    if (state.buildings.length > currentIndex + 1) {
+    // When a building is added, automatically switch to it.
+    if (state.buildings.length > prevBuildingsLength.current) {
         setCurrentIndex(state.buildings.length - 1);
-    }
+    } 
     // Handle active index becoming invalid after deletion
     else if (currentIndex >= state.buildings.length && state.buildings.length > 0) {
         setCurrentIndex(state.buildings.length - 1);
     }
+    // Update the previous length for the next render cycle.
+    prevBuildingsLength.current = state.buildings.length;
   }, [state.buildings.length, currentIndex]);
 
   const currentBuilding = state.buildings[currentIndex];
