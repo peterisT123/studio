@@ -1,7 +1,8 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { PlusCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 import { useAppContext } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
@@ -15,16 +16,20 @@ import {
 
 export function PropertyDetailsStep() {
   const { state, addBuilding } = useAppContext();
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const containerVariants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
+  useEffect(() => {
+    // Handle switching to a newly added building
+    if (state.buildings.length > currentIndex + 1) {
+        setCurrentIndex(state.buildings.length - 1);
+    }
+    // Handle active index becoming invalid after deletion
+    else if (currentIndex >= state.buildings.length && state.buildings.length > 0) {
+        setCurrentIndex(state.buildings.length - 1);
+    }
+  }, [state.buildings.length, currentIndex]);
+
+  const currentBuilding = state.buildings[currentIndex];
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -32,43 +37,45 @@ export function PropertyDetailsStep() {
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-headline">Īpašuma detaļas</CardTitle>
           <CardDescription className="text-lg">
-            Pievienojiet vienu vai vairākus apdrošināmos objektus.
+            Pārvaldiet savus apdrošināmos objektus.
           </CardDescription>
         </CardHeader>
       </Card>
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="space-y-6"
-      >
-        <AnimatePresence>
+      <div className="p-4 bg-card border rounded-2xl flex flex-wrap items-center justify-center gap-2 shadow-sm">
+          <p className='text-sm font-medium text-muted-foreground mr-2'>Apdrošināmie objekti:</p>
           {state.buildings.map((building, index) => (
-             <motion.div
-                key={building.id}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -50, scale: 0.9 }}
-                transition={{ duration: 0.5, type: 'spring' }}
-                layout
-             >
-                <PropertyCard building={building} index={index} />
-            </motion.div>
+              <Button
+                  key={building.id}
+                  variant={index === currentIndex ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCurrentIndex(index)}
+                  className="rounded-full transition-all"
+              >
+                  Nr. {index + 1}
+              </Button>
           ))}
-        </AnimatePresence>
-      </motion.div>
-
-      <div className="flex justify-center">
-        <Button
-          variant="outline"
-          onClick={addBuilding}
-          className="rounded-full py-6 px-8 text-lg border-2 border-dashed border-primary text-primary hover:text-primary hover:border-primary hover:bg-primary/10"
-        >
-          <PlusCircle className="mr-2 h-6 w-6" />
-          Pievienot vēl vienu īpašumu
-        </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={addBuilding}
+              className="rounded-full transition-all"
+          >
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Pievienot jaunu
+          </Button>
       </div>
+      
+      {currentBuilding && (
+        <motion.div
+            key={currentBuilding.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+        >
+            <PropertyCard building={currentBuilding} index={currentIndex} />
+        </motion.div>
+      )}
     </div>
   );
 }
