@@ -13,6 +13,7 @@ export interface AppState {
     legalStatus: LegalStatus;
     buildings: Building[];
     contact: Contact;
+    submitted: boolean;
 }
 
 export interface AppContextType {
@@ -24,4 +25,5 @@ export interface AppContextType {
     addBuilding: () => void;
     updateBuilding: (index: number, data: Partial<Building>) => void;
     removeBuilding: (index: number) => void;
+    setSubmitted: (submitted: boolean) => void;
 }

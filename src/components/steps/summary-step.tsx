@@ -2,17 +2,20 @@
 import { useAppContext } from '@/context/app-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, MailCheck } from 'lucide-react';
 
 export function SummaryStep() {
   const { state } = useAppContext();
 
-  const SummaryItem = ({ label, value }: { label: string; value: string | number | undefined }) => (
-    <div className="flex justify-between items-center py-2">
-      <p className="text-muted-foreground">{label}</p>
-      <p className="font-semibold text-foreground text-right">{value}</p>
-    </div>
-  );
+  const SummaryItem = ({ label, value }: { label: string; value: string | number | undefined }) => {
+    if (!value) return null;
+    return (
+        <div className="flex justify-between items-center py-2">
+            <p className="text-muted-foreground">{label}</p>
+            <p className="font-semibold text-foreground text-right">{value}</p>
+        </div>
+    );
+  };
 
   const BooleanSummaryItem = ({ label, value }: { label: string; value: boolean }) => (
     <div className="flex justify-between items-center py-2">
@@ -28,6 +31,18 @@ export function SummaryStep() {
     </div>
   );
 
+  if (state.submitted) {
+    return (
+        <Card className="max-w-2xl mx-auto rounded-3xl shadow-lg">
+            <CardHeader className="text-center">
+                <MailCheck className="mx-auto h-16 w-16 text-primary" />
+                <CardTitle className="text-3xl font-headline">Paldies!</CardTitle>
+                <CardDescription className='text-base'>Pieteikums sagatavots nosūtīšanai. Lūdzu, pabeidziet sūtīšanu savā e-pasta programmā.</CardDescription>
+            </CardHeader>
+        </Card>
+    );
+  }
+
   return (
     <Card className="max-w-3xl mx-auto rounded-3xl shadow-lg">
       <CardHeader className="text-center">
@@ -38,8 +53,11 @@ export function SummaryStep() {
         <div>
           <h3 className="text-lg font-semibold font-headline mb-2 text-primary">Klienta informācija</h3>
           <Card className='rounded-2xl'>
-            <CardContent className='p-4 space-y-2'>
+            <CardContent className='p-4 divide-y'>
               <SummaryItem label="Juridiskais statuss" value={state.legalStatus} />
+              <SummaryItem label="Vārds, uzvārds" value={state.contact.name} />
+              <SummaryItem label="E-pasts" value={state.contact.email} />
+              <SummaryItem label="Tālrunis" value={state.contact.phone} />
             </CardContent>
           </Card>
         </div>

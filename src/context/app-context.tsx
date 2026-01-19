@@ -26,6 +26,7 @@ const initialState: AppState = {
     email: '',
     phone: '',
   },
+  submitted: false,
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -73,6 +74,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       buildings: prev.buildings.filter((_, i) => i !== index),
     }));
   };
+  
+  const setSubmitted = (submitted: boolean) => {
+    setState((prev) => ({ ...prev, submitted }));
+  };
 
 
   const value = {
@@ -84,6 +89,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     addBuilding,
     updateBuilding,
     removeBuilding,
+    setSubmitted,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

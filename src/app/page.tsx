@@ -6,11 +6,54 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Stepper } from '@/components/stepper';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/context/app-context';
+import type { AppState } from '@/lib/types';
+import { useToast } from '@/hooks/use-toast';
 
 import { IntroStep } from '@/components/steps/intro-step';
 import { PropertyDetailsStep } from '@/components/steps/property-details-step';
 import { SummaryStep } from '@/components/steps/summary-step';
 import { ContactStep } from '@/components/steps/contact-step';
+
+function formatDataForEmail(data: AppState): string {
+  let emailBody = `Jauns apdrošināšanas pieteikums\n`;
+  emailBody += `=================================\n\n`;
+  
+  emailBody += `KLIENTA INFORMĀCIJA\n`;
+  emailBody += `-------------------\n`;
+  emailBody += `Juridiskais statuss: ${data.legalStatus}\n`;
+  emailBody += `Vārds, uzvārds: ${data.contact.name}\n`;
+  emailBody += `E-pasts: ${data.contact.email}\n`;
+  emailBody += `Tālrunis: ${data.contact.phone}\n\n`;
+
+  emailBody += `APDROŠINĀMIE OBJEKTI\n`;
+  emailBody += `---------------------\n`;
+
+  data.buildings.forEach((building, index) => {
+    emailBody += `\nOBJEKTS #${index + 1}\n`;
+    emailBody += `Tips: ${building.objectType}\n`;
+    emailBody += `Īpašnieka vārds: ${building.ownerName}\n`;
+    emailBody += `Platība: ${building.propertyArea} m²\n`;
+    emailBody += `Būvniecības gads: ${building.buildYear}\n`;
+
+    if (building.objectType === 'Dzīvoklis') {
+      emailBody += `Stāvs: ${building.currentFloor} no ${building.totalFloors}\n`;
+    }
+    if (building.objectType === 'Dzīvojamā ēka') {
+        emailBody += `Stāvu skaits: ${building.totalFloors}\n`;
+    }
+
+    emailBody += `Statuss: ${building.isConstantlyInhabited ? 'Pastāvīgi apdzīvots' : 'Nav pastāvīgi apdzīvots'}\n`;
+    emailBody += `Zaudējumi pēdējos 3 gados: ${building.lossesInLast3Years ? 'Ir bijuši' : 'Nav bijuši'}\n`;
+    emailBody += `Kustamā manta: ${building.movablePropertyIncluded ? 'Iekļauta' : 'Nav iekļauta'}\n`;
+    if (building.movablePropertyIncluded) {
+      emailBody += `   - Vērtīga manta: ${building.valuableMovablePropertyIncluded ? 'Iekļauta' : 'Nav iekļauta'}\n`;
+    }
+  });
+
+  emailBody += `\n\n--- E-pasta beigas ---\n`;
+
+  return emailBody;
+}
 
 const steps = [
   {
@@ -27,23 +70,39 @@ const steps = [
   },
   {
     id: 3,
-    title: 'Kopsavilkums',
-    icon: Check,
-    component: <SummaryStep />,
-  },
-  {
-    id: 4,
     title: 'Kontakti',
     icon: Mail,
     component: <ContactStep />,
   },
+  {
+    id: 4,
+    title: 'Apstiprinājums',
+    icon: Check,
+    component: <SummaryStep />,
+  },
 ];
 
 export default function InsuranceWizard() {
-  const { state, handleBack, handleNext } = useAppContext();
+  const { state, handleBack, handleNext, setSubmitted } = useAppContext();
   const { step } = state;
+  const { toast } = useToast();
 
   const currentStepData = steps.find((s) => s.id === step);
+
+  const handleSend = () => {
+    const emailBody = formatDataForEmail(state);
+    const mailtoLink = `mailto:brokeris@example.com?subject=${encodeURIComponent('Jauns apdrošināšanas pieteikums')}&body=${encodeURIComponent(emailBody)}`;
+    
+    toast({
+      title: "Pieteikums sagatavots!",
+      description: "Jūsu e-pasta klients tiks atvērts, lai nosūtītu pieteikumu.",
+      variant: 'default',
+      className: 'bg-primary text-primary-foreground border-primary'
+    });
+
+    setSubmitted(true);
+    window.location.href = mailtoLink;
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -81,21 +140,23 @@ export default function InsuranceWizard() {
       <footer className="sticky bottom-0 bg-background/80 backdrop-blur-sm border-t py-4">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div>
-            {step > 1 && (
+            {step > 1 && !state.submitted && (
               <Button variant="outline" onClick={handleBack}>
                 Atpakaļ
               </Button>
             )}
           </div>
           <div className='flex items-center space-x-2'>
-            <span className="text-sm text-muted-foreground">
-                Solis {step} no {steps.length}
-            </span>
-            {step < steps.length && (
+            {!state.submitted && (
+                <span className="text-sm text-muted-foreground">
+                    Solis {step} no {steps.length}
+                </span>
+            )}
+            {step < steps.length && !state.submitted && (
               <Button onClick={handleNext}>Tālāk</Button>
             )}
-            {step === steps.length && (
-              <Button form="contact-form" type="submit">
+            {step === steps.length && !state.submitted && (
+              <Button onClick={handleSend}>
                 Sūtīt brokerim
               </Button>
             )}
